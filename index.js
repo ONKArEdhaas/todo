@@ -14,12 +14,14 @@ mongoose.connect(process.env.MONGODB_URL, {
 
 const app = express();
 
+// CORS configuration to allow requests from the React frontend in development and production
+app.use(cors({
+    origin: process.env.NODE_ENV === 'production' ? 'https://todo-24ow.onrender.com' : 'http://localhost:5173',
+    credentials: true,  // Allow credentials (cookies) to be sent along with requests
+}));
+
 // Middleware
 app.use(express.json());
-app.use(cors({
-    origin: "http://localhost:5173",  // Update this later for production
-    credentials: true
-}));
 
 // Routes
 app.use("/api/v1", require("./routes/taskData"));
