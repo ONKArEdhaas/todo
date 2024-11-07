@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const path = require("path"); // Add this to serve static files
 require("dotenv").config({ path: "./.env" });
 
 // Connect to MongoDB
@@ -16,13 +17,25 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: "http://localhost:5173",  // Update this later for production
     credentials: true
 }));
 
 // Routes
 app.use("/api/v1", require("./routes/taskData"));
 app.use("/api/auth", require("./routes/authRoutes"));
+app.use("/api/v1", require("./routes/gpt"));
+
+// Serve React static files in production
+if (process.env.NODE_ENV === 'production') {
+    // Serve static files from the React app (build folder)
+    app.use(express.static(path.join(__dirname, 'public')));
+
+    // Catch-all route to serve index.html for React app
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    });
+}
 
 // 404 Handler
 app.use("*", (req, res) => {
