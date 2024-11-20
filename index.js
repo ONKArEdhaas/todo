@@ -7,7 +7,7 @@ require("dotenv").config({ path: "./.env" });
 // Connect to MongoDB
 const dbURL = process.env.NODE_ENV === 'production' ? process.env.OTHER : process.env.MONGODB_URL;
 
-mongoose.connect(dbURL, {
+mongoose.connect(process.env.OTHER, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     serverSelectionTimeoutMS: 150000, // 
