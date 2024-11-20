@@ -10,6 +10,7 @@ const dbURL = process.env.NODE_ENV === 'production' ? process.env.OTHER : proces
 mongoose.connect(dbURL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 150000, // 
 })
     .then(() => console.log("MongoDB Connected"))
     .catch(err => console.error("MongoDB connection error:", err));
