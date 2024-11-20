@@ -5,7 +5,9 @@ const path = require("path"); // Add this to serve static files
 require("dotenv").config({ path: "./.env" });
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URL, {
+const dbURL = process.env.NODE_ENV === 'production' ? process.env.OTHER : process.env.MONGODB_URL;
+
+mongoose.connect(dbURL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
