@@ -27,7 +27,10 @@ app.use(cors({
 app.use(express.json());
 
 // Routes
+app.use("/api/v1", require("./routes/mailRoutes"));
 app.use("/api/v1", require("./routes/taskData"));
+app.use("/api/v1", require("./routes/companyRoutes"));
+app.use("/api/v1", require("./routes/employeeRoutes"));
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/v1", require("./routes/gpt"));
 

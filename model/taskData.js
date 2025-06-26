@@ -13,6 +13,10 @@ const taskDataSchema = new mongoose.Schema(
             type: String,
             required: true // It's good practice to add validation
         },
+        userID: {
+            type: String,
+            required: true // It's good practice to add validation
+        },
     },
     {
         timestamps: true // This option adds createdAt and updatedAt fields

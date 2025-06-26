@@ -3,14 +3,14 @@ const Task = require('../model/taskData');
 
 exports.addTaskData = asyncHandler(async (req, res) => {
     console.log(req.body); // Log the incoming request body
-    const { title, category } = req.body;
+    const { title, category, userID } = req.body;
 
     if (!title || !category) {
         return res.status(400).json({ message: "Title and category are required." });
     }
 
     try {
-        const product = new Task({ title, category });
+        const product = new Task({ title, category, userID });
         const newProduct = await product.save();
         res.status(201).json(newProduct);
     } catch (err) {
@@ -18,14 +18,36 @@ exports.addTaskData = asyncHandler(async (req, res) => {
     }
 });
 
+// exports.getAllTasks = asyncHandler(async (req, res) => {
+//     try {
+//         const tasks = await Task.find(); // Fetch all tasks from the database
+//         res.status(200).json(tasks); // Return the tasks as JSON
+//     } catch (err) {
+//         res.status(500).json({ message: err.message }); // Handle errors
+//     }
+// });
+
+
 exports.getAllTasks = asyncHandler(async (req, res) => {
     try {
-        const tasks = await Task.find(); // Fetch all tasks from the database
-        res.status(200).json(tasks); // Return the tasks as JSON
+        const auth = req.headers.authorization?.split(" ")[1]; // Extract token from Bearer auth
+        if (!auth) {
+            return res.status(400).json({ message: 'auth is required' });
+        }
+        console.log(auth);
+
+        // Fetch tasks where userId matches auth (_id of user)
+        // const tasks = await Task.findById(auth);
+        const tasks = await Task.find({ userID: auth });
+        console.log(tasks);
+
+        res.status(200).json(tasks);
     } catch (err) {
-        res.status(500).json({ message: err.message }); // Handle errors
+        res.status(500).json({ message: err.message });
     }
 });
+
+
 
 
 exports.getTaskById = asyncHandler(async (req, res) => {

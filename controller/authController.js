@@ -35,7 +35,7 @@ exports.loginUser = asyncHandler(async (req, res) => {
     }
 
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: "1h" });
-    res.status(200).json({ token, user: { name: user.name, username: user.username } });
+    res.status(200).json({ token, user: { name: user.name, username: user.username, id: user._id } });
 });
 
 // Logout User (client can simply clear the token)
