@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const nodemailer = require("nodemailer");
 const EmailTemplate = require("../model/template");
 const emailTemplates = require("../template");
+const path = require('path');
 
 const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -22,7 +23,7 @@ exports.sendEmails = async (req, res) => {
             message: "Invalid request. Ensure all fields are provided and 'employee' is a non-empty array."
         });
     }
-    console.log(typeof (templateId));
+    // console.log(typeof (templateId));
 
     // Find the email template by templateId
     const emailTemplate = emailTemplates.find(t => t.id === +templateId);
@@ -45,6 +46,18 @@ exports.sendEmails = async (req, res) => {
                 subject: subject,
                 text: emailBody.replace(/<[^>]*>?/gm, ""), // Strip HTML tags for plain text version
                 html: emailBody,
+                attachments: [
+                    {
+                        filename: 'about_me.pdf',
+                        path: path.join(__dirname, 'files', 'about_me.pdf'),
+                        contentType: 'application/pdf'
+                    },
+                    {
+                        filename: 'SDE1.pdf',
+                        path: path.join(__dirname, 'files', 'SDE1.pdf'),
+                        contentType: 'application/pdf'
+                    }
+                ]
             };
 
             // Send email using the transporter
