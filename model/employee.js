@@ -30,6 +30,10 @@ const employeeSchema = new mongoose.Schema({
         type: String,
         trim: true
     },
+    gender: {
+        type: String,
+        trim: true
+    },
     userID: {
         type: String,
         required: true // It's good practice to add validation

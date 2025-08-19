@@ -3,14 +3,14 @@ const Employee = require('../model/employee');
 
 // Create a new employee
 exports.addEmployee = asyncHandler(async (req, res) => {
-    const { name, phone, email, company, position, linkedin, userID } = req.body;
+    const { name, phone, email, company, position, linkedin, userID, gender } = req.body;
 
     if (!name || !email || !company) {
         return res.status(400).json({ message: "Name, email, and company are required." });
     }
 
     try {
-        const employee = new Employee({ name, phone, email, company, position, linkedin, userID });
+        const employee = new Employee({ name, phone, email, company, position, linkedin, userID, gender });
         const newEmployee = await employee.save();
         res.status(201).json(newEmployee);
     } catch (err) {
@@ -25,7 +25,7 @@ exports.getAllEmployees = asyncHandler(async (req, res) => {
         if (!auth) {
             return res.status(400).json({ message: 'auth is required' });
         }
-        console.log(auth);
+        // console.log(auth);
         const employees = await Employee.find({ userID: auth });
         res.status(200).json(employees);
     } catch (err) {
@@ -42,7 +42,7 @@ exports.getFilteredEmployees = asyncHandler(async (req, res) => {
             return res.status(400).json({ message: 'auth is required' });
         }
         console.log(auth);
-        const employees = await Employee.find({ userID: auth }).select('name position company linkedin email');
+        const employees = await Employee.find({ userID: auth }).select('name position company linkedin email gender');
         res.status(200).json(employees);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -52,7 +52,7 @@ exports.getFilteredEmployees = asyncHandler(async (req, res) => {
 // Update an employee
 exports.updateEmployee = asyncHandler(async (req, res) => {
     const { id } = req.params;
-    const { name, phone, email, company, position, linkedin } = req.body;
+    const { name, phone, email, company, position, linkedin, gender } = req.body;
 
     if (!name || !email || !company) {
         return res.status(400).json({ message: "Name, email, and company are required." });
@@ -63,7 +63,7 @@ exports.updateEmployee = asyncHandler(async (req, res) => {
     try {
         const updatedEmployee = await Employee.findByIdAndUpdate(
             id,
-            { name, phone, email, company, position, linkedin },
+            { name, phone, email, company, position, linkedin, gender },
             { new: true, runValidators: true }
         );
 
